@@ -20,8 +20,10 @@ namespace deliverAPI.Migrations
 
             modelBuilder.Entity("deliverAPI.Models.clContas", b =>
                 {
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DiasAtraso")
                         .HasColumnType("int");
@@ -34,13 +36,23 @@ namespace deliverAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RegraCalculo")
-                        .HasColumnType("int");
+                    b.Property<double>("Juros")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Multa")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ValOrig")
                         .HasColumnType("float");
 
-                    b.HasKey("Nome");
+                    b.Property<double>("ValorCorrigido")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
 
                     b.ToTable("clContas");
                 });

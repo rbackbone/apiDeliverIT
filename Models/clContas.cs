@@ -9,6 +9,8 @@ namespace deliverAPI.Models
     {
         
         [Key]
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Campo obrigatório")]
         public string Nome { get; set; }
 
@@ -23,7 +25,7 @@ namespace deliverAPI.Models
         [validaData(ErrorMessage = "Formato esperado: dd/mm/yyyy")]
         public string DtPagto { get; set; }
 
-        public int DiasAtraso { get; private set; }
+        public int DiasAtraso { get => calcularAtraso(); }
 
         public double Multa { get; private set; }
 
@@ -39,9 +41,9 @@ namespace deliverAPI.Models
             DiasAtraso, RegraCalculo, ValCorrigido
          --------------------------------------------------------------
          -------------------------------------------------------------*/
-        public void calcularAtraso()
+        private int calcularAtraso()
         {
-            double dValorNovo = 0;
+            int iRetorno = 0;
 
             int iDia2 = Convert.ToInt32(DtVenc.Substring(0, 2));
             int iMes2 = Convert.ToInt32(DtVenc.Substring(3, 2));
@@ -55,45 +57,48 @@ namespace deliverAPI.Models
 
             if (dataIni > dataFim)
             {
-                DiasAtraso = (dataIni - dataFim).Days;
+                iRetorno = (dataIni - dataFim).Days;
 
-                if (DiasAtraso <= 3)
+                calcularJuros(iRetorno);
+            }
+
+            return iRetorno;
+        }
+
+        private void calcularJuros(int iDiasAtraso)
+        {
+            double dValorNovo = 0;
+
+            if (iDiasAtraso <= 3)
+            {
+                Multa = 2;
+                Juros = 0.1;
+            }
+            else
+            {
+                if (iDiasAtraso <= 5)
                 {
-                    Multa = 2;
-                    Juros = 0.1;
+                    Multa = 3;
+                    Juros = 0.2;
                 }
                 else
                 {
-                    if (DiasAtraso <= 5)
-                    {
-                        Multa = 3;
-                        Juros = 0.2;
-                    }
-                    else
-                    {
-                        Multa = 5;
-                        Juros = 0.3;
-                    }
+                    Multa = 5;
+                    Juros = 0.3;
                 }
-
-                dValorNovo = ValOrig + (ValOrig / 100) * Multa;
-                ValorCorrigido = dValorNovo;
-
-                for (int i = 1; i <= DiasAtraso; i++)
-                {
-                    dValorNovo = dValorNovo + (dValorNovo / 1000) * Juros;
-                }
-                ValorCorrigido = Math.Round(dValorNovo,2);
-
             }
 
+            dValorNovo = ValOrig + (ValOrig / 100) * Multa;
+            ValorCorrigido = dValorNovo;
+
+            for (int i = 1; i <= iDiasAtraso; i++)
+            {
+                dValorNovo = dValorNovo + (dValorNovo / 1000) * Juros;
+            }
+
+            ValorCorrigido = Math.Round(dValorNovo, 2);
+
         }
 
-        private static double calcularValor()
-        {
-            double dResult = 0;
-
-            return dResult;
-        }
     }
 }

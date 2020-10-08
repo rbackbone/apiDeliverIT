@@ -20,7 +20,7 @@ namespace deliverAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<contasDbContext>(opt => opt.UseInMemoryDatabase("Database"));
-            //services.AddDbContext<contasDbContext>(opt => opt.UseSqlServer( "Database"));
+            //services.AddDbContext<contasDbContext>(opt => opt.UseSqlServer( "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"));
 
             services.AddScoped<contasDbContext, contasDbContext>();
             services.AddControllers();

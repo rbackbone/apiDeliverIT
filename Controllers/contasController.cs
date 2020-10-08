@@ -18,6 +18,7 @@ namespace deliverAPI.Controllers
         {
             var ret = await context.clContas.ToListAsync();
 
+            //return View("Index", ret);
             return ret;
         }
 
@@ -30,7 +31,6 @@ namespace deliverAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                contaItem.calcularAtraso();
                 context.clContas.Add(contaItem);
  
                 await context.SaveChangesAsync();
