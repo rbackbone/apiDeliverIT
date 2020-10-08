@@ -74,9 +74,7 @@ namespace deliverAPI.Models
                 Multa = 2;
                 Juros = 0.1;
             }
-            else
-            {
-                if (iDiasAtraso <= 5)
+            else if (iDiasAtraso <= 5)
                 {
                     Multa = 3;
                     Juros = 0.2;
@@ -86,7 +84,7 @@ namespace deliverAPI.Models
                     Multa = 5;
                     Juros = 0.3;
                 }
-            }
+            
 
             dValorNovo = ValOrig + (ValOrig / 100) * Multa;
             ValorCorrigido = dValorNovo;
