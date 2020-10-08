@@ -7,11 +7,7 @@ namespace deliverAPI.Models
 {
     public class clContas
     {
-        /*
-        [Key]
-        public int Id { get; set; }
-        */
-
+        
         [Key]
         [Required(ErrorMessage = "Campo obrigatório")]
         public string Nome { get; set; }
@@ -29,26 +25,39 @@ namespace deliverAPI.Models
 
         public int DiasAtraso { get; set; }
 
-        /*
-        public clContas(int diasAtraso, double valCorrigido)
-        {
-            DiasAtraso = diasAtraso;
-            ValCorrigido = valCorrigido;
-        }*/
+        public int RegraCalculo { get; set; }
 
-        //private static
-        public void calcularAtraso()
-        {
-            Console.WriteLine(DtVenc.Substring(0, 2));
-            Console.WriteLine(DtVenc.Substring(3, 2));
-            Console.WriteLine(DtVenc.Substring(6, 4));
+        public double ValCorrigido { get; set; }
 
-            int iDia2 = Convert.ToInt32(DtVenc.Substring(0, 2));
-            int iMes2 = Convert.ToInt32(DtVenc.Substring(3, 2));
-            int iAno2 = Convert.ToInt32(DtVenc.Substring(6, 4));
-            int iDia1 = Convert.ToInt32(DtPagto.Substring(0, 2));
-            int iMes1 = Convert.ToInt32(DtPagto.Substring(3, 2));
-            int iAno1 = Convert.ToInt32(DtPagto.Substring(6, 4));
+
+        /* ---- Contrutor não funcionou
+         * ----------------------------  */
+        public clContas(int _DiasAtraso, int _RegraCalculo, double _ValCorrigido)
+        {
+            DiasAtraso = calcularAtraso(this); 
+            RegraCalculo = _RegraCalculo;
+            ValCorrigido = _ValCorrigido;
+        }
+
+        public clContas() {}
+
+        /*--------------------------------------------------------------
+         ---- aqui atualizando propriedades :
+            DiasAtraso, RegraCalculo, ValCorrigido
+        --------------------------------------------------------------
+          não consegui deixar a classe com um CONSTRUTOR porque
+          deu erro de execução no JSON, para não perder tempo 
+          decidi deixar estas atualizações no método abaixo
+
+         -------------------------------------------------------------*/
+        public int calcularAtraso(clContas iConta)
+        {
+            int iDia2 = Convert.ToInt32(iConta.DtVenc.Substring(0, 2));
+            int iMes2 = Convert.ToInt32(iConta.DtVenc.Substring(3, 2));
+            int iAno2 = Convert.ToInt32(iConta.DtVenc.Substring(6, 4));
+            int iDia1 = Convert.ToInt32(iConta.DtPagto.Substring(0, 2));
+            int iMes1 = Convert.ToInt32(iConta.DtPagto.Substring(3, 2));
+            int iAno1 = Convert.ToInt32(iConta.DtPagto.Substring(6, 4));
             int iResult = 0;
 
             DateTime dataIni = new DateTime(iAno1, iMes1, iDia1, 0, 0, 0);
@@ -59,7 +68,8 @@ namespace deliverAPI.Models
                 iResult = (dataIni - dataFim).Days;
             }
 
-            DiasAtraso = iResult;
+            return iResult;
+
         }
 
         private static double calcularValor()
