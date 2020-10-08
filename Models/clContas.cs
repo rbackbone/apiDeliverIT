@@ -23,11 +23,11 @@ namespace deliverAPI.Models
         [validaData(ErrorMessage = "Formato esperado: dd/mm/yyyy")]
         public string DtPagto { get; set; }
 
-        public int DiasAtraso { get; set; }
+        public int DiasAtraso { get; private set; }
 
-        public int RegraCalculo { get; set; }
+        public int RegraCalculo { get; private set; }
 
-        public double ValCorrigido { get; set; }
+        public double ValCorrigido { get; private set; }
 
 
         /* ---- Contrutor não funcionou
