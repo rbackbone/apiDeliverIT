@@ -17,13 +17,11 @@ namespace deliverAPI.Models
         [Required(ErrorMessage = "Campo obrigatório")]
         public double ValOrig { get; set; }
 
-        [Required(ErrorMessage = "Campo obrigatório")]
-        [validaData(ErrorMessage = "Formato esperado:  dd/mm/yyyy")]
-        public string DtVenc { get; set; }
+        [Required(ErrorMessage = "Campo obrigatório: AAAA-MM-DD")]
+        public DateTime DtVenc { get; set; }
 
-        [Required(ErrorMessage = "Campo é obrigatório")]
-        [validaData(ErrorMessage = "Formato esperado: dd/mm/yyyy")]
-        public string DtPagto { get; set; }
+        [Required(ErrorMessage = "Campo é obrigatório: AAAA-MM-DD")]
+        public DateTime DtPagto { get; set; }
 
         public int DiasAtraso { get => calcularAtraso(); }
 
@@ -37,23 +35,16 @@ namespace deliverAPI.Models
         public clContas() {}
         
         /*--------------------------------------------------------------
-         ---- aqui atualizando propriedades :
-            DiasAtraso, RegraCalculo, ValCorrigido
-         --------------------------------------------------------------
+            atualizando propriedades :
+            DiasAtraso, ValCorrigido, Juros e Multa
          -------------------------------------------------------------*/
         private int calcularAtraso()
         {
             int iRetorno = 0;
 
-            int iDia2 = Convert.ToInt32(DtVenc.Substring(0, 2));
-            int iMes2 = Convert.ToInt32(DtVenc.Substring(3, 2));
-            int iAno2 = Convert.ToInt32(DtVenc.Substring(6, 4));
-            int iDia1 = Convert.ToInt32(DtPagto.Substring(0, 2));
-            int iMes1 = Convert.ToInt32(DtPagto.Substring(3, 2));
-            int iAno1 = Convert.ToInt32(DtPagto.Substring(6, 4));
+            DateTime dataIni = DtPagto;
+            DateTime dataFim = DtVenc;
 
-            DateTime dataIni = new DateTime(iAno1, iMes1, iDia1, 0, 0, 0);
-            DateTime dataFim = new DateTime(iAno2, iMes2, iDia2, 0, 0, 0);
 
             if (dataIni > dataFim)
             {
@@ -65,9 +56,16 @@ namespace deliverAPI.Models
             return iRetorno;
         }
 
+        /*--------------------------------------------------------------
+          ---- ATENÇÃO
+               só chamar este método em caso de vencimento da conta  ---
+               iDiasAtraso > 0                   -----------------------
+          -------------------------------------------------------------*/
         private void calcularJuros(int iDiasAtraso)
         {
             double dValorNovo = 0;
+
+            if (iDiasAtraso <= 0) { return; }
 
             if (iDiasAtraso <= 3)
             {

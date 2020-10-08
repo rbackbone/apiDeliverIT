@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace deliverAPI.Migrations
 {
-    public partial class final : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,9 +15,8 @@ namespace deliverAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(nullable: false),
                     ValOrig = table.Column<double>(nullable: false),
-                    DtVenc = table.Column<string>(nullable: false),
-                    DtPagto = table.Column<string>(nullable: false),
-                    DiasAtraso = table.Column<int>(nullable: false),
+                    DtVenc = table.Column<DateTime>(nullable: false),
+                    DtPagto = table.Column<DateTime>(nullable: false),
                     Multa = table.Column<double>(nullable: false),
                     Juros = table.Column<double>(nullable: false),
                     ValorCorrigido = table.Column<double>(nullable: false)
