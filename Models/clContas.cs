@@ -25,50 +25,67 @@ namespace deliverAPI.Models
 
         public int DiasAtraso { get; private set; }
 
-        public int RegraCalculo { get; private set; }
+        public double Multa { get; private set; }
 
-        public double ValCorrigido { get; private set; }
+        public double Juros { get; private set; }
 
+        public double ValorCorrigido { get; private set; }
 
-        /* ---- Contrutor não funcionou
-         * ----------------------------  */
-        public clContas(int _DiasAtraso, int _RegraCalculo, double _ValCorrigido)
-        {
-            DiasAtraso = calcularAtraso(this); 
-            RegraCalculo = _RegraCalculo;
-            ValCorrigido = _ValCorrigido;
-        }
-
+     
         public clContas() {}
-
+        
         /*--------------------------------------------------------------
          ---- aqui atualizando propriedades :
             DiasAtraso, RegraCalculo, ValCorrigido
-        --------------------------------------------------------------
-          não consegui deixar a classe com um CONSTRUTOR porque
-          deu erro de execução no JSON, para não perder tempo 
-          decidi deixar estas atualizações no método abaixo
-
+         --------------------------------------------------------------
          -------------------------------------------------------------*/
-        public int calcularAtraso(clContas iConta)
+        public void calcularAtraso()
         {
-            int iDia2 = Convert.ToInt32(iConta.DtVenc.Substring(0, 2));
-            int iMes2 = Convert.ToInt32(iConta.DtVenc.Substring(3, 2));
-            int iAno2 = Convert.ToInt32(iConta.DtVenc.Substring(6, 4));
-            int iDia1 = Convert.ToInt32(iConta.DtPagto.Substring(0, 2));
-            int iMes1 = Convert.ToInt32(iConta.DtPagto.Substring(3, 2));
-            int iAno1 = Convert.ToInt32(iConta.DtPagto.Substring(6, 4));
-            int iResult = 0;
+            double dValorNovo = 0;
+
+            int iDia2 = Convert.ToInt32(DtVenc.Substring(0, 2));
+            int iMes2 = Convert.ToInt32(DtVenc.Substring(3, 2));
+            int iAno2 = Convert.ToInt32(DtVenc.Substring(6, 4));
+            int iDia1 = Convert.ToInt32(DtPagto.Substring(0, 2));
+            int iMes1 = Convert.ToInt32(DtPagto.Substring(3, 2));
+            int iAno1 = Convert.ToInt32(DtPagto.Substring(6, 4));
 
             DateTime dataIni = new DateTime(iAno1, iMes1, iDia1, 0, 0, 0);
             DateTime dataFim = new DateTime(iAno2, iMes2, iDia2, 0, 0, 0);
 
             if (dataIni > dataFim)
             {
-                iResult = (dataIni - dataFim).Days;
-            }
+                DiasAtraso = (dataIni - dataFim).Days;
 
-            return iResult;
+                if (DiasAtraso <= 3)
+                {
+                    Multa = 2;
+                    Juros = 0.1;
+                }
+                else
+                {
+                    if (DiasAtraso <= 5)
+                    {
+                        Multa = 3;
+                        Juros = 0.2;
+                    }
+                    else
+                    {
+                        Multa = 5;
+                        Juros = 0.3;
+                    }
+                }
+
+                dValorNovo = ValOrig + (ValOrig / 100) * Multa;
+                ValorCorrigido = dValorNovo;
+
+                for (int i = 1; i <= DiasAtraso; i++)
+                {
+                    dValorNovo = dValorNovo + (dValorNovo / 1000) * Juros;
+                }
+                ValorCorrigido = Math.Round(dValorNovo,2);
+
+            }
 
         }
 

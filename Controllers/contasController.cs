@@ -29,10 +29,9 @@ namespace deliverAPI.Controllers
             [FromBody] clContas contaItem)
         {
             if (ModelState.IsValid)
-            {                
+            {
+                contaItem.calcularAtraso();
                 context.clContas.Add(contaItem);
-
-               // System.Console.WriteLine(contaItem.DiasAtraso);
  
                 await context.SaveChangesAsync();
                 return contaItem;
