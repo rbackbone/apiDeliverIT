@@ -18,7 +18,6 @@ namespace deliverAPI.Controllers
         {
             var ret = await context.clContas.ToListAsync();
 
-            //return View("Index", ret);
             return ret;
         }
 
