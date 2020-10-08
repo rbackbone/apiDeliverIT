@@ -1,12 +1,10 @@
-
+using deliverAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using deliverAPI.Data;
-
 
 namespace deliverAPI
 {
@@ -21,7 +19,6 @@ namespace deliverAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-   
             services.AddDbContext<contasDbContext>(opt => opt.UseInMemoryDatabase("Database"));
             //services.AddDbContext<contasDbContext>(opt => opt.UseSqlServer( "Database"));
 
@@ -46,7 +43,6 @@ namespace deliverAPI
             {
                 endpoints.MapControllers();
             });
-
         }
     }
 }

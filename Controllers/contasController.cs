@@ -1,24 +1,19 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using deliverAPI.Data;
+using deliverAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using deliverAPI.Models;
-using deliverAPI.Data;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace deliverAPI.Controllers
 {
-
     [ApiController]
     [Route("api/v1/contas")]
-
     public class contasController : ControllerBase
     {
-
-        // GET: 
+        // GET:
         [HttpGet]
         [Route("")]
-
         public async Task<ActionResult<List<clContas>>> Get([FromServices] contasDbContext context)
         {
             var ret = await context.clContas.ToListAsync();
@@ -26,8 +21,7 @@ namespace deliverAPI.Controllers
             return ret;
         }
 
-
-        // POST: 
+        // POST:
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<clContas>> Post(
@@ -36,30 +30,20 @@ namespace deliverAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                
                 contaItem.calcularAtraso();
                 context.clContas.Add(contaItem);
 
-                System.Console.WriteLine(contaItem.DiasAtraso );
+                System.Console.WriteLine(contaItem.DiasAtraso);
                 //contaItem.DiasAtraso = contaItem.calcularAtraso(contaItem);
                 //System.Console.WriteLine(contaItem.DiasAtraso);
 
                 await context.SaveChangesAsync();
                 return contaItem;
-                
             }
             else
             {
                 return BadRequest(ModelState);
-
             }
-
         }
-
     }
 }
-
-
-
-
-
