@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace deliverAPI.Models
 {
-    public partial class clContas
+    public class clContas
     {
         /*
         [Key]
